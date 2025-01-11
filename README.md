@@ -53,6 +53,12 @@ Este repositorio contiene resoluciones, trabajos y programas realizados durante 
   - MAT 4 (Matemática 4)
   - [PDyTR (Programación Distribuida y Tiempo Real)](./08_semestre/pdytr)
 
+- Noveno semestre
+  - UX (Diseño de Experiencia de Usuario)
+  - ASyPI (Aspectos Sociales y Profesionales de Informática)
+  - (Optativa 2 LI)
+  - (Tesina de Licenciatura en Informática)
+
 ## Licencia
 
 [MIT](./LICENSE)

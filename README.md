@@ -28,6 +28,12 @@ Este repositorio contiene resoluciones, trabajos y programas realizados durante 
   - [ISO (Introducción a los Sistemas Operativos)](./04_semestre/iso)
   - [OO 1 (Orientación a Objetos 1)](./04_semestre/oo_1)
 
+- Quinto semestre
+  - [CPLP (Conceptos y Paradigmas de Lenguajes de Programación)](./05_semestre/cplp)
+  - [IS 2 (Ingeniería de Software 2)](./05_semestre/is_2)
+  - MAT 3 (Matemática 3)
+  - [OO 2 (Orientación a Objetos 2)](./05_semestre/oo_2)
+
 ## Licencia
 
 [MIT](./LICENSE)

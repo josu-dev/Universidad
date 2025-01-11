@@ -47,6 +47,12 @@ Este repositorio contiene resoluciones, trabajos y programas realizados durante 
   - [SP (Sistemas Paralelos)](./07_semestre/sp)
   - TCVP (Teoría de la Computación y Verificación de Programas)
 
+- Octavo semestre
+  - LIA (Lógica e Inteligencia Artificial)
+  - LS (Laboratorio de Software)
+  - MAT 4 (Matemática 4)
+  - [PDyTR (Programación Distribuida y Tiempo Real)](./08_semestre/pdytr)
+
 ## Licencia
 
 [MIT](./LICENSE)

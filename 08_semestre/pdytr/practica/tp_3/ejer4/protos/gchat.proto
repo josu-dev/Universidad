@@ -1,0 +1,66 @@
+syntax = "proto3";
+
+service GroupChat {
+    rpc Connect(ConnectRequest) returns (ConnectResponse) {}
+
+    rpc Disconnect (DisconnectRequest) returns (DisconnectResponse) {}
+
+    rpc SendMessage(SendMessageRequest) returns (SendMessageResponse) {}
+
+    rpc GetHistory(GetHistoryRequest) returns (GetHistoryResponse) {}
+
+    rpc Update(UpdateRequest) returns (UpdateResponse) {}
+}
+
+message ConnectRequest {
+    string name = 1;
+}
+
+message ConnectResponse {
+    enum State {
+        CONNECTED = 0;
+        DISCONNECTED = 1;
+        USER_EXISTS = 2;
+    }
+    State state = 3;
+    string message = 4;
+}
+
+message DisconnectRequest {
+    string name = 1;
+}
+
+message DisconnectResponse {
+    string name = 1;
+    string message = 2;
+}
+
+message SendMessageRequest {
+    string name = 1;
+    string text = 2;
+}
+
+message SendMessageResponse {
+    bool success = 1;
+}
+
+message GetHistoryRequest {
+}
+
+message GetHistoryResponse {
+    string history = 1;
+}
+
+message UpdateRequest {
+    string name = 1;
+}
+
+message UserMessage {
+    string name = 1;
+    string text = 2;
+    int64 ts = 3;
+}
+
+message UpdateResponse {
+    repeated UserMessage messages = 1;
+}

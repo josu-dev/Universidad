@@ -1,0 +1,18 @@
+syntax = "proto3";
+
+package app.bench;
+
+option java_package = "app.bench";
+option java_outer_classname = "BenchServiceProto";
+
+message PingRequest {
+  bytes data = 1;
+}
+
+message PingResponse {
+  bytes data = 1;
+}
+
+service BenchService {
+  rpc Ping(PingRequest) returns (PingResponse);
+}

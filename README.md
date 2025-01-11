@@ -18,9 +18,15 @@ Este repositorio contiene resoluciones, trabajos y programas realizados durante 
   - [TP (Taller de Programación)](./02_semestre/tp)
 
 - Tercer semestre
-  - [FOD (Fundamentos de Organización de Datos)](./03_semestre/fod)
   - [AyED (Algoritmos y Estructuras de Datos)](./03_semestre/ayed)
-  - [SL (Seminario de Lenguajes)](./03_semestre/sl)
+  - [FOD (Fundamentos de Organización de Datos)](./03_semestre/fod)
+  - [Python (Seminario de Lenguajes - Python)](./03_semestre/python)
+
+- Cuarto semestre
+  - DBD (Diseño de Bases de Datos)
+  - [ING 1 (Ingeniería de Software 1)](./04_semestre/is_1)
+  - [ISO (Introducción a los Sistemas Operativos)](./04_semestre/iso)
+  - [OO 1 (Orientación a Objetos 1)](./04_semestre/oo_1)
 
 ## Licencia
 

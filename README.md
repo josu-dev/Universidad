@@ -17,6 +17,11 @@ Este repositorio contiene resoluciones, trabajos y programas realizados durante 
   - MAT 2 (Matematica 2)
   - [TP (Taller de Programación)](./02_semestre/tp)
 
+- Tercer semestre
+  - [FOD (Fundamentos de Organización de Datos)](./03_semestre/fod)
+  - [AyED (Algoritmos y Estructuras de Datos)](./03_semestre/ayed)
+  - [SL (Seminario de Lenguajes)](./03_semestre/sl)
+
 ## Licencia
 
 [MIT](./LICENSE)

@@ -34,6 +34,13 @@ Este repositorio contiene resoluciones, trabajos y programas realizados durante 
   - MAT 3 (Matemática 3)
   - [OO 2 (Orientación a Objetos 2)](./05_semestre/oo_2)
 
+- Sexto semestre
+  - [CyC (Computabilidad y Complejidad)](./06_semestre/cyc)
+  - [PC (Programación Concurrente)](./06_semestre/pc)
+  - [PS (Proyecto de Software)](./06_semestre/ps)
+  - [RyC (Redes y Comunicaciones)](./06_semestre/ryc)
+  - [TTPS (Taller de Tecnologías de Producción de Software)](./06_semestre/ttps)
+
 ## Licencia
 
 [MIT](./LICENSE)

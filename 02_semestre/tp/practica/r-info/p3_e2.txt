@@ -1,0 +1,171 @@
+programa p3_e2
+procesos
+  proceso izquierda
+  comenzar
+    repetir 3
+      derecha
+  fin
+  proceso dirOpuesta
+  comenzar
+    repetir 2
+      derecha
+  fin
+  proceso juntarFlores(ES flo: numero)
+  comenzar
+    mientras HayFlorEnLaEsquina
+      tomarFlor
+      flo:= flo +1
+  fin
+  proceso juntarPapeles(ES pa: numero)
+  comenzar
+    mientras HayPapelEnLaEsquina
+      tomarPapel
+      pa:= pa +1
+  fin
+  proceso escaleraFlo1(ES flo: numero)
+  variables
+    tam: numero
+  comenzar
+    tam:= 5
+    repetir 4
+      repetir 2
+        juntarFlores(flo)
+        repetir tam
+          mover
+        derecha
+      dirOpuesta
+      tam:= tam -1
+  fin
+  proceso centroFlo(ES flo: numero)
+  variables
+    tam: numero
+  comenzar
+    mover
+    juntarFlores(flo)
+    derecha
+    BloquearEsquina(15, 15)
+    mover
+    juntarFlores(flo)
+    dirOpuesta
+    mover
+    LiberarEsquina(15, 15)
+  fin
+  proceso escaleraFlo2(ES flo: numero)
+  variables
+    tam: numero
+  comenzar
+    tam:= 2
+    repetir 4
+      repetir 2
+        repetir tam
+          mover
+        juntarFlores(flo)
+        derecha
+      dirOpuesta
+      tam:= tam +1
+  fin
+  proceso escaleraPa1(ES pa: numero)
+  variables
+    tam: numero
+  comenzar
+    tam:= 5
+    repetir 4
+      repetir 2
+        juntarPapeles(pa)
+        repetir tam
+          mover
+        izquierda
+      dirOpuesta
+      tam:= tam -1
+  fin
+  proceso centroPa(ES pa: numero)
+  variables
+    tam: numero
+  comenzar
+    mover
+    juntarPapeles(pa)
+    izquierda
+    BloquearEsquina(15, 15)
+    mover
+    juntarPapeles(pa)
+    dirOpuesta
+    mover
+    LiberarEsquina(15, 15)
+  fin
+  proceso escaleraPa2(ES pa: numero)
+  variables
+    tam: numero
+  comenzar
+    tam:= 2
+    repetir 4
+      repetir 2
+        repetir tam
+          mover
+        juntarPapeles(pa)
+        izquierda
+      dirOpuesta
+      tam:= tam +1
+  fin
+
+areas
+  aFlorero: AreaPC(1, 1, 15, 30)
+  aPapelero: AreaP(17, 1, 31, 30)
+  aCentro: AreaC(16, 16, 16, 16)
+
+robots
+  robot florero
+  variables
+    id: numero
+    flo: numero
+  comenzar
+    flo:= 0
+    RecibirMensaje(id, rJefe)
+    escaleraFlo1(flo)
+    centroFlo(flo)
+    escaleraFlo2(flo)
+    Informar('Flores', flo)
+    EnviarMensaje(id, rJefe)
+  fin
+
+  robot papelero
+  variables
+    id: numero
+    pa: numero
+  comenzar
+    pa:= 0
+    RecibirMensaje(id, rJefe)
+    escaleraPa1(pa)
+    centroPa(pa)
+    escaleraPa2(pa)
+    Informar('Papeles', pa)
+    EnviarMensaje(id, rJefe)
+  fin
+  
+  robot arbitro
+  variables
+    id: numero
+  comenzar
+    EnviarMensaje(1, rFlo)
+    EnviarMensaje(2, rPa)
+    RecibirMensaje(id, *)
+    Informar('Gano', id)
+  fin
+
+variables
+  rFlo: florero
+  rPa: papelero
+  rJefe: arbitro
+
+comenzar
+  AsignarArea(rFlo, aFlorero)
+  AsignarArea(rFlo, aCentro)
+  
+  AsignarArea(rPa, aPapelero)
+  AsignarArea(rPa, aCentro)
+  
+  AsignarArea(rJefe, aFlorero)
+  
+  Iniciar(rFlo, 1, 1)
+  Iniciar(rPa, 31, 1)
+  Iniciar(rJefe, 15, 1)
+fin

@@ -1,0 +1,171 @@
+programa p3_e6_a
+procesos
+  proceso enviarIds
+  comenzar
+    EnviarMensaje(1, r1)
+    EnviarMensaje(2, r2)
+    EnviarMensaje(3, r3)
+  fin
+  proceso juntarFlores(ES flo: numero)
+  comenzar
+    mientras HayFlorEnLaEsquina
+      tomarFlor
+      flo:= flo +1
+  fin
+  proceso juntarPapeles(ES pa: numero)
+  comenzar
+    mientras HayPapelEnLaEsquina
+      tomarPapel
+      pa:= pa +1
+  fin
+  proceso juntarPorId(E id: numero; ES flo: numero; ES pa: numero)
+  comenzar
+    si (id = 1)
+      juntarFlores(flo)
+    sino
+      si (id = 2)
+        juntarFlores(flo)
+        juntarPapeles(pa)
+      sino
+        juntarPapeles(pa)
+  fin
+  proceso moverRecta(E id: numero; E tam: numero; ES flo: numero; ES pa: numero)
+  comenzar
+    repetir tam
+      mover
+      juntarPorId(id, flo, pa)
+  fin
+  proceso moverEle(E id: numero; E alt: numero; E anc: numero; ES flo: numero; ES pa: numero)
+  comenzar
+    repetir alt
+      mover
+      juntarPorId(id, flo, pa)
+    derecha
+    repetir anc
+      mover
+      juntarPorId(id, flo, pa)
+  fin
+  proceso moverSeguro(E id: numero; E difA: numero; E difC: numero; ES flo: numero; ES pa: numero)
+  variables
+    av, ca: numero
+  comenzar
+    av:= PosAv +difA
+    ca:= PosCa + difC
+    BloquearEsquina(av, ca)
+    mover
+    juntarPorId(id, flo, pa)
+    mover
+    LiberarEsquina(av, ca)
+    juntarPorId(id, flo, pa)
+  fin
+  proceso trabajo(E id: numero; E ca: numero; E flo: numero; E pa: numero)
+  comenzar
+    Pos(1, ca)
+    repetir 2
+      derecha
+    si (id = 1)
+      mientras ((flo > 0) & (PosAv < 100))
+        depositarFlor
+        flo:= flo -1
+        mover
+    sino
+      si (id = 2)
+        mientras (((flo > 0) | (pa > 0)) & (PosAv < 100))
+          si (flo > 0)
+            depositarFlor
+            flo:= flo -1
+          si (pa > 0)
+            depositarPapel
+            pa:= pa -1
+          mover
+      sino
+        mientras ((pa > 0) & (PosAv < 100))
+          depositarPapel
+          pa:= pa -1
+          mover
+    si (flo > 0)
+      depositarFlor
+    si (pa > 0)
+      depositarPapel
+  fin
+areas
+  aJefe: AreaP(1, 1, 1, 1)
+  aCuadrados: AreaC(2, 2, 16, 16)
+  aRecorrido: AreaPC(1, 20, 100, 22)
+
+robots
+  robot corredor
+  variables
+    id, flo, pa, caTra: numero
+  comenzar
+    flo:= 0
+    pa:= 0
+    RecibirMensaje(id, rJefe)
+    si (id = 1)
+      moverEle(id, 6, 2, flo, pa)
+      moverSeguro(id, 1, 0, flo, pa)
+      moverEle(id, 2, 2, flo, pa)
+      moverSeguro(id, 0, -1, flo, pa)
+      moverEle(id, 2, 6, flo, pa)
+    sino
+      si (id = 2)
+        moverRecta(id, 2, flo, pa)
+        moverSeguro(id, 0, 1, flo, pa)
+        moverEle(id, 6, 3, flo, pa)
+        moverSeguro(id, 1, 0, flo, pa)
+        moverEle(id, 5, 5, flo, pa)
+        moverSeguro(id, 0, -1, flo, pa)
+        moverEle(id, 3, 6, flo, pa)
+        moverSeguro(id, -1, 0, flo, pa)
+        moverRecta(id, 2, flo, pa)
+      sino
+        moverRecta(id, 5, flo, pa)
+        moverSeguro(id, 0, 1, flo, pa)
+        derecha
+        moverEle(id, 7, 7, flo, pa)
+        derecha
+        moverSeguro(id, -1, 0, flo, pa)
+        moverRecta(id, 5, flo, pa)
+    EnviarMensaje(id, rJefe)
+    RecibirMensaje(caTra, rJefe)
+    trabajo(id, caTra, flo, pa)
+  fin
+  
+  robot arbitro
+  variables
+    id, caTra: numero
+  comenzar
+    caTra:= 19
+    enviarIds
+    repetir 3
+      caTra:= caTra +1
+      RecibirMensaje(id, *)
+      si (id = 1)
+        EnviarMensaje(caTra, r1)
+      sino
+        si (id = 2)
+          EnviarMensaje(caTra, r2)
+        sino
+          EnviarMensaje(caTra, r3)
+  fin
+
+variables
+  r1: corredor
+  r2: corredor
+  r3: corredor
+  rJefe: arbitro
+
+comenzar
+  AsignarArea(rJefe, aJefe)
+  AsignarArea(r1, aCuadrados)
+  AsignarArea(r1, aRecorrido)
+  AsignarArea(r2, aCuadrados)
+  AsignarArea(r2, aRecorrido)
+  AsignarArea(r3, aCuadrados)
+  AsignarArea(r3, aRecorrido)
+  
+  Iniciar(rJefe, 1, 1)
+  Iniciar(r1, 2, 2)
+  Iniciar(r2, 5, 5)
+  Iniciar(r3, 9, 9)
+fin

@@ -1,0 +1,90 @@
+programa p3_e5
+procesos
+  proceso enviarIds
+  comenzar
+    EnviarMensaje(1, r1)
+    EnviarMensaje(2, r2)
+    EnviarMensaje(3, r3)
+    EnviarMensaje(4, r4)
+  fin
+
+areas
+  aJefe: AreaP(1, 1, 1, 1)
+  aCarrera: AreaPC(4, 1, 10, 100)
+  aFuente: AreaPC(11, 11, 11, 11)
+
+robots
+  robot corredor
+  variables
+    id, iniAv, iniCa, altura: numero
+    seguir: boolean
+  comenzar
+    altura:= 0
+    seguir:= V
+    RecibirMensaje(id, rJefe)
+    mientras seguir
+      iniAv:= PosAv
+      iniCa:= PosCa
+      BloquearEsquina(11, 11)
+      Pos(11, 11)
+      si HayPapelEnLaEsquina
+        tomarPapel
+      sino
+        seguir:= F
+      Pos(iniAv, iniCa)
+      LiberarEsquina(11, 11)
+      si seguir
+        mover
+        altura:= altura +1
+    EnviarMensaje(id, rJefe)
+    EnviarMensaje(altura, rJefe)
+  fin
+  
+  robot arbitro
+  variables
+    id, idMax, altura, alturaMax: numero
+  comenzar
+    idMax:= -1
+    enviarIds
+    repetir 4
+      RecibirMensaje(id, *)
+      si (id = 1)
+        RecibirMensaje(altura, r1)
+      sino
+        si (id = 2)
+          RecibirMensaje(altura, r2)
+        sino
+          si (id = 3)
+            RecibirMensaje(altura, r3)
+          sino
+            RecibirMensaje(altura, r4)
+      si (altura > alturaMax)
+        alturaMax:= altura
+        idMax:= id
+    Informar('Gano', idMax)
+  fin
+
+variables
+  r1: corredor
+  r2: corredor
+  r3: corredor
+  r4: corredor
+  rJefe: arbitro
+
+comenzar
+  AsignarArea(rJefe, aJefe)
+  AsignarArea(r1, aCarrera)
+  AsignarArea(r1, aFuente)
+  AsignarArea(r2, aCarrera)
+  AsignarArea(r2, aFuente)
+  AsignarArea(r3, aCarrera)
+  AsignarArea(r3, aFuente)
+  AsignarArea(r4, aCarrera)
+  AsignarArea(r4, aFuente)
+  
+  Iniciar(rJefe, 1, 1)
+  Iniciar(r1, 4, 1)
+  Iniciar(r2, 6, 1)
+  Iniciar(r3, 8, 1)
+  Iniciar(r4, 10, 1)
+fin

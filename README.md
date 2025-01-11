@@ -12,6 +12,11 @@ Este repositorio contiene resoluciones, trabajos y programas realizados durante 
   - [MAT 1 (Matematica 1)](./01_semestre/mat_1)
   - [OC (Organización de Computadoras)](./01_semestre/oc)
 
+- Segundo semestre
+  - [AC (Arquitectura de Computadoras)](./02_semestre/ac)
+  - MAT 2 (Matematica 2)
+  - [TP (Taller de Programación)](./02_semestre/tp)
+
 ## Licencia
 
 [MIT](./LICENSE)

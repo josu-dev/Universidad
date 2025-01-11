@@ -1,0 +1,86 @@
+programa p3_e4_b
+procesos
+  proceso enviarIds
+  comenzar
+    EnviarMensaje(1, r1)
+    EnviarMensaje(2, r2)
+    EnviarMensaje(3, r3)
+    EnviarMensaje(4, r4)
+  fin
+  proceso juntarFlores
+  comenzar
+    mientras HayFlorEnLaEsquina
+      tomarFlor
+  fin
+
+areas
+  aJefe: AreaP(1, 1, 1, 1)
+  aInicio: AreaPC(9, 9, 9, 12)
+  aTrabajo: AreaPC(10, 10, 11, 11)
+
+robots
+  robot florero
+  variables
+    iniAv, iniCa: numero
+    id: numero
+    seguir: boolean
+  comenzar
+    iniAv:= PosAv
+    iniCa:= PosCa
+    seguir:= V
+    RecibirMensaje(id, rJefe)
+    mientras (seguir)
+      BloquearEsquina(10, 10)
+      Pos(10, 10)
+      si HayFlorEnLaEsquina
+        tomarFlor
+      sino
+        seguir:= F
+      Pos(iniAv, iniCa)
+      LiberarEsquina(10, 10)
+      si seguir
+        BloquearEsquina(11, 11)
+        Pos(11, 11)
+        depositarFlor
+        Pos(iniAv, iniCa)
+        LiberarEsquina(11, 11)
+    EnviarMensaje(id, rJefe)
+  fin
+  
+  robot arbitro
+  variables
+    id: numero
+  comenzar
+    enviarIds
+    repetir 4
+      RecibirMensaje(id, *)
+    Informar('Ultimo', id)
+    Pos(11,11)
+    juntarFlores
+  fin
+
+variables
+  r1: florero
+  r2: florero
+  r3: florero
+  r4: florero
+  rJefe: arbitro
+
+comenzar
+  AsignarArea(rJefe, aJefe)
+  AsignarArea(rJefe, aTrabajo)
+  AsignarArea(r1, aInicio)
+  AsignarArea(r1, aTrabajo)
+  AsignarArea(r2, aInicio)
+  AsignarArea(r2, aTrabajo)
+  AsignarArea(r3, aInicio)
+  AsignarArea(r3, aTrabajo)
+  AsignarArea(r4, aInicio)
+  AsignarArea(r4, aTrabajo)
+  
+  Iniciar(rJefe, 1, 1)
+  Iniciar(r1, 9, 9)
+  Iniciar(r2, 9, 10)
+  Iniciar(r3, 9, 11)
+  Iniciar(r4, 9, 12)
+fin

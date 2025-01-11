@@ -1,0 +1,84 @@
+programa ejer2
+procesos
+  proceso contarPapeles(ES papeles:numero)
+  variables
+    aux: numero
+  comenzar
+    aux:= 0
+    mientras HayPapelEnLaEsquina
+      tomarPapel
+      aux:= aux +1
+    repetir aux
+      depositarPapel
+    papeles:= papeles + aux
+  fin
+  proceso contarFlores(ES flores: numero)
+  variables
+    aux: numero
+  comenzar
+    aux:= 0
+    mientras HayFlorEnLaEsquina
+      tomarFlor
+      aux:= aux +1
+    repetir aux
+      depositarFlor
+    flores:= flores + aux
+  fin
+
+areas
+  mapa: AreaC(1,1,16,20)
+
+robots
+  robot juntador
+  variables
+    cantidad, alto, flores, papeles: numero
+  comenzar
+    cantidad:= 0
+    repetir 4
+      Random(alto, 1, 5)
+      flores:= 0
+      papeles:= 0
+      repetir alto
+        contarFlores(flores)
+        contarPapeles(papeles)
+        mover
+      contarFlores(flores)
+      contarPapeles(papeles)
+      derecha
+      mover
+      repetir 3
+        derecha
+      si (flores > papeles)
+        cantidad:= cantidad +1
+    EnviarMensaje(cantidad,rJefe)
+  fin
+
+  robot jefe
+  variables
+    cantidades, aux: numero
+  comenzar
+    RecibirMensaje(cantidades, *)
+    repetir 2
+      RecibirMensaje(aux, *)
+      cantidades:= cantidades + aux
+    Informar(cantidades)
+  fin
+
+variables
+  rJefe: jefe
+  rJunt1: juntador
+  rJunt2: juntador
+  rJunt3: juntador
+
+comenzar
+  AsignarArea(rJefe, mapa)
+  AsignarArea(rJunt1, mapa)
+  AsignarArea(rJunt2, mapa)
+  AsignarArea(rJunt3, mapa)
+  Iniciar(rJefe, 1, 1)
+  Iniciar(rJunt1 , 2, 1)
+  Iniciar(rJunt2 , 7, 1)
+  Iniciar(rJunt3 , 12, 1)
+fin
+
+

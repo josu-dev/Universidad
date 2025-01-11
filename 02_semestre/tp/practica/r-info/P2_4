@@ -1,0 +1,110 @@
+programa ejer4
+procesos
+  proceso juntarPapelesYFlores(ES cantidad:numero)
+  comenzar
+    mientras HayPapelEnLaEsquina
+      tomarPapel
+      cantidad:= cantidad +1
+    mientras HayFlorEnLaEsquina
+      tomarFlor
+      cantidad:= cantidad +1
+  fin
+
+  proceso juntarRandom(ES cantidad: numero)
+  variables
+    av,ca: numero
+  comenzar
+    Random(av,25,75)
+    Random(ca,25,75)
+    Pos(av,ca)
+    juntarPapelesYFlores(cantidad)
+  fin
+  
+  proceso mandarCodigo(E id: numero; E cod: numero)
+  comenzar
+    si (id = 1)
+      EnviarMensaje(cod, r1)
+    sino
+      si (id = 2)
+        EnviarMensaje(cod, r2)
+      sino
+        si (id = 3)
+          EnviarMensaje(cod, r3)
+        sino
+          EnviarMensaje(cod, r4)
+  fin
+
+areas
+  espera: AreaC(1,1,40,1)
+  cuadrante: AreaPC(25,25,75,75)
+
+robots
+  robot recolector
+  variables
+    cantidad,origenAv,origenCa,cod: numero
+  comenzar
+    cantidad:= 0
+    origenAv:= PosAv
+    origenCa:= PosCa
+    RecibirMensaje(cod, *)
+    mientras (cod <> 1)
+      juntarRandom(cantidad)
+      Pos(origenAv,origenCa)
+      EnviarMensaje(1, fiscal)
+      RecibirMensaje(cod, *)
+    EnviarMensaje(cantidad, fiscal)
+    RecibirMensaje(cod, *)
+    si (cod= 2)
+      Pos(50,50)
+  fin
+
+  robot fiscalizador
+  variables
+    id, cant, idMax, cantMax: numero
+  comenzar
+    repetir 10
+      Random(id, 1, 4)
+      mandarCodigo(id, 0)
+      RecibirMensaje(id, *)
+    id:= 0
+    idMax:= 1
+    cantMax:= 0
+    repetir 4
+      id:= id +1
+      mandarCodigo(id, 1)
+      RecibirMensaje(cant, *)
+      si (cant > cantMax)
+        idMax:= id
+        cantMax:= cant
+    repetir 4
+      si (id <> idMax)
+        mandarCodigo(id, 3)
+      sino
+        mandarCodigo(id, 2)
+      id:= id -1
+  fin
+
+variables
+  fiscal: fiscalizador
+  r1: recolector
+  r2: recolector
+  r3: recolector
+  r4: recolector
+
+comenzar
+  AsignarArea(fiscal, espera)
+  AsignarArea(r1, espera)
+  AsignarArea(r1, cuadrante)
+  AsignarArea(r2, espera)
+  AsignarArea(r2, cuadrante)
+  AsignarArea(r3, espera)
+  AsignarArea(r3, cuadrante)
+  AsignarArea(r4, espera)
+  AsignarArea(r4, cuadrante)
+  Iniciar(fiscal, 1, 1)
+  Iniciar(r1, 25, 1)
+  Iniciar(r2, 30, 1)
+  Iniciar(r3, 35, 1)
+  Iniciar(r4, 40, 1)
+fin
+

@@ -1,0 +1,613 @@
+EJERCICIO 2
+
+org 1000h
+CAR db ?
+
+org 3000h
+
+org 2000h
+MOV BX, OFFSET CAR
+mov al,0
+repetir: cmp al,127
+jz fin_carga
+inc al
+mov [bx],al
+inc bx
+jmp repetir
+fin_carga: mov bx, offset CAR
+MOV AL, 127
+INT 7
+INT 0
+hlt
+end
+
+
+--------------------------------------------
+EJERCICIO 3
+
+org 1000h
+ABC_INI db ?
+
+org 3000h
+
+org 2000h
+MOV BX, OFFSET ABC_INI
+mov al,41h
+repetir: cmp al,91
+jz fin_carga
+mov [bx],al
+add al,20h
+inc bx
+mov [bx],al
+sub al,1fh
+inc bx
+jmp repetir
+fin_carga: mov bx, offset ABC_INI
+MOV AL, 52
+INT 7
+INT 0
+hlt
+end
+
+
+--------------------------------------------
+EJERCICIO 4
+
+a) en bx se alamacena la direccion donde se encuentra el primer byte a imprimir
+   en al la candtidad de direcciones a imprimir
+b) en bx se almacena la direccion donde se guarda el dato leido
+c) imprimime el valor almacenado en la direccion bx
+   en cl se almacena el resultado
+
+
+---------------------------------------------
+EJERCICIO 5
+
+ORG 1000H
+MSJ DB "INGRESE UN NUMERO: "
+MSJ_FIN DB ?
+MSJ_ERROR DB 0ah
+          DB "CARACTER NO VALIDO"
+MSJ_ERROR_FIN db ?
+
+ORG 1500H
+NUM DB ?
+
+ORG 2000H
+MOV BX, OFFSET MSJ
+MOV AL, OFFSET MSJ_FIN -OFFSET MSJ
+INT 7
+MOV BX, OFFSET NUM
+INT 6
+MOV AL, 1
+INT 7
+MOV CL, NUM
+call ES_NUM
+INT 0
+
+org 3000h
+ES_NUM: mov dl,0ffh
+cmp byte ptr [bx],30h
+js ERROR
+cmp byte ptr [bx],3ah
+js ES_NUM_FIN
+ERROR: mov bx, OFFSET MSJ_ERROR
+mov al, OFFSET MSJ_ERROR_FIN-OFFSET MSJ_ERROR
+int 7
+mov dl,0
+ES_NUM_FIN: ret
+END
+
+
+--------------------------------------
+EJERCICIO 6
+
+ORG 1000H
+CERO DB "CERO"
+UNO DB "UNO"
+DOS DB "DOS"
+TRES DB "TRES"
+CUATRO DB "CUATRO"
+CINCO DB "CINCO"
+SEIS DB "SEIS"
+SIETE DB "SIETE"
+OCHO DB "OCHO"
+NUEVE DB "NUEVE"
+FIN DB ?
+TABLA DW CERO,UNO,DOS,TRES,CUATRO,CINCO,SEIS,SIETE,OCHO,NUEVE,FIN
+
+MSJ DB 0ah
+    DB "INGRESE UN NUMERO: "
+MSJ_FIN DB ?
+
+ORG 1500H
+NUM DB ?
+
+ORG 2000H
+mov cl,0
+repetir: cmp cl,2
+ jz fin
+ call LEER_NUM
+ cmp byte ptr [bx],30h
+ jnz pasar
+ inc cl
+ pasar: call IMP_NUM
+jmp repetir
+fin:INT 0
+
+org 3000h
+LEER_NUM: MOV BX, OFFSET MSJ
+MOV AL, OFFSET MSJ_FIN -OFFSET MSJ
+INT 7
+MOV BX, OFFSET NUM
+INT 6
+ret
+
+IMP_NUM: mov ah,0
+mov al,[bx]
+sub al,30h
+add al,al
+add ax,offset TABLA
+mov bx,ax
+mov ax,[bx]
+add bx,2
+mov dx,[bx]
+mov bx,ax
+sub dx,ax
+mov ax,dx
+int 7
+ret
+
+END
+
+
+-----------------------------------------
+EJERCICIO 7
+
+ORG 1000H
+MSJ DB 0ah
+    DB "INGRESE UN NUMERO: "
+MSJ_FIN DB ?
+NUM_IMP DB ?
+
+
+ORG 1500H
+NUM DB ?
+
+ORG 2000H
+mov dx,offset NUM
+call LEER_NUM
+mov cl,[bx]
+sub cl,30h
+inc dx
+call LEER_NUM
+mov ch,[BX]
+sub ch,30h
+mov bx,offset NUM_IMP
+mov al,1
+add cl,ch
+cmp cl,10
+js IMPRIMIR
+inc al
+mov byte ptr [bx],31h
+inc bx
+sub cl,10
+IMPRIMIR:add cl,30h
+mov byte ptr [bx],cl
+mov bx,offset NUM_IMP
+int 7
+INT 0
+
+org 3000h
+LEER_NUM: MOV BX, OFFSET MSJ
+MOV AL, OFFSET MSJ_FIN -OFFSET MSJ
+INT 7
+MOV BX, dx
+INT 6
+ret
+
+END
+
+
+------------------------------------------
+EJERCICIO 8
+ORG 1000H
+MSJ DB 0ah
+    DB "INGRESE UN NUMERO: "
+MSJ_FIN DB ?
+NUM_IMP DB "+"
+        DB ?
+
+
+ORG 1500H
+NUM DB ?
+
+ORG 2000H
+mov dx,offset NUM
+call LEER_NUM
+mov cl,[bx]
+inc dx
+call LEER_NUM
+mov ch,[BX]
+cmp cl,ch
+jns IMPRIMIR
+mov al,cl
+mov cl,ch
+mov ch,al
+mov bx,offset NUM_IMP
+mov byte ptr [bx],2dh
+IMPRIMIR:sub cl,ch
+add cl,30h
+mov bx,offset NUM_IMP +1
+mov byte ptr [bx],cl
+mov bx,offset NUM_IMP
+mov al,2
+int 7
+INT 0
+
+org 3000h
+LEER_NUM: MOV BX, OFFSET MSJ
+MOV AL, OFFSET MSJ_FIN -OFFSET MSJ
+INT 7
+MOV BX, dx
+INT 6
+ret
+
+END
+
+
+-------------------------------------------
+EJERCICIO 9
+
+ORG 1000H
+TAM_CLAVE DW 4
+MSJ DB "INGRESE SU CLAVE: "
+MSJ_FIN DB ?
+MSJ_PERMITIDO DB 0ah
+              DB "Acceso permitido"
+MSJ_DENEGADO DB 0ah
+             DB "Acceso denegado"
+MSJ_DENEGADO_FIN DB ?
+CLAVE_BASE DB "Pito"
+
+
+ORG 1500H
+CLAVE_INGRESADA DB ?
+
+ORG 2000H
+call LEER_CLAVE
+call VERIFICAR_CLAVE
+INT 0
+
+org 3000h
+LEER_CLAVE: MOV BX, OFFSET MSJ
+ MOV AL, OFFSET MSJ_FIN -OFFSET MSJ
+ INT 7
+ mov cx,0
+ MOV BX, OFFSET CLAVE_INGRESADA
+ iterar: cmp cx,TAM_CLAVE
+ jz LEER_CLAVE_FIN
+ INT 6
+ inc bx
+ inc cx
+ jmp iterar
+LEER_CLAVE_FIN:ret
+
+VERIFICAR_CLAVE:mov cl,0
+mov dx,TAM_CLAVE
+dec dx
+revisar: cmp cx,dx
+jz VALIDO
+mov bx,offset CLAVE_INGRESADA
+add bx,cx
+mov al,[bx]
+mov bx,offset CLAVE_BASE
+add bx,cx
+inc cl
+cmp al,[bx]
+jz revisar
+INVALIDO: mov bx, offset MSJ_DENEGADO
+mov al, offset MSJ_DENEGADO_FIN - offset MSJ_DENEGADO
+int 7
+jmp VERIFICAR_CLAVE_FIN
+VALIDO: mov bx, offset MSJ_PERMITIDO
+mov al, offset MSJ_DENEGADO - offset MSJ_PERMITIDO
+int 7
+VERIFICAR_CLAVE_FIN: ret
+END
+
+
+-------------------------------------------
+EJERCICIO 11
+
+PIC EQU 20H
+EOI EQU 20H
+N_F10 EQU 10
+
+ORG 40
+IP_F10 DW RUT_F10
+
+org 1000h
+CAR db ?
+
+ORG 2000H
+CLI
+MOV AL, 7eH
+OUT PIC+1, AL ; PIC: registro IMR
+MOV AL, N_F10
+OUT PIC+4, AL ; PIC: registro INT0
+STI
+CALL CICLAR_ABC
+HLT
+
+ORG 3000H
+CICLAR_ABC: mov dl,41h
+inicio: cmp dl,5ah
+jz CICLAR_ABC
+inc dl
+jmp inicio
+
+RUT_F10:MOV AL, EOI
+OUT EOI, AL
+mov bx,offset CAR
+mov [bx],dl
+mov al,1
+INT 7
+IRET
+END
+
+
+---------------------------------------------
+EJERCICIO 13
+
+TIMER EQU 10H
+PIC EQU 20H
+EOI EQU 20H
+N_CLK EQU 10
+
+ORG 40
+IP_CLK DW RUT_CLK
+
+ORG 1000H
+DMIN DB 30H
+UMIN DB 30H
+     DB 3AH
+DSEG DB 30H
+USEG DB 2FH
+     DB 0AH
+FIN DB ?
+
+ORG 3000H
+RUT_CLK: PUSH AX
+INC USEG
+CMP USEG, 3AH
+JNZ RESET
+MOV USEG, 30H
+INC DSEG
+CMP DSEG, 36H
+JNZ RESET
+
+MOV DSEG, 30H
+INC UMIN
+CMP UMIN, 3AH
+JNZ RESET
+MOV UMIN, 30H
+INC DMIN
+CMP DMIN, 36H
+JNZ RESET
+INT 0
+RESET:CMP USEG,30h
+JNZ SALTAR
+INT 7
+SALTAR:MOV AL, 0
+OUT TIMER, AL
+MOV AL, EOI
+OUT PIC, AL
+POP AX
+IRET
+
+ORG 2000H
+CLI
+MOV AL, 0FDH
+OUT PIC+1, AL ; PIC: registro IMR
+MOV AL, N_CLK 
+OUT PIC+5, AL ; PIC: registro INT1
+MOV AL, 1
+OUT TIMER+1, AL ; TIMER: registro COMP
+MOV AL, 0
+OUT TIMER, AL ; TIMER: registro CONT
+MOV BX, OFFSET DMIN
+MOV AL, OFFSET FIN-OFFSET DMIN
+STI
+LAZO: JMP LAZO
+hlt
+END
+
+
+-----------------------------------------
+EJERCICIO 14
+
+TIMER EQU 10H
+PIC EQU 20H
+EOI EQU 20H
+N_CLK EQU 10
+N_F10 EQU 11
+
+org 44
+IP_F10 DW RUT_F10
+ORG 40
+IP_CLK DW RUT_CLK
+
+ORG 1000H
+DMIN DB 30H
+UMIN DB 30H
+     DB 3AH
+DSEG DB 30H
+USEG DB 2FH
+     DB 0AH
+FIN DB ?
+
+ORG 3000H
+RUT_CLK: PUSH AX
+cmp cx,1
+jnz SALTAR
+INC USEG
+CMP USEG, 3AH
+JNZ RESET
+MOV USEG, 30H
+INC DSEG
+CMP DSEG, 33H
+JNZ RESET
+INT 0
+
+MOV DSEG, 30H
+INC UMIN
+CMP UMIN, 3AH
+JNZ RESET
+MOV UMIN, 30H
+INC DMIN
+CMP DMIN, 36H
+JNZ RESET
+INT 0
+RESET:INT 7
+SALTAR:MOV AL, 0
+OUT TIMER, AL
+MOV AL, EOI
+OUT PIC, AL
+POP AX
+IRET
+
+RUT_F10:push AX
+MOV AL, EOI
+OUT EOI, AL
+cmp cx,0
+jz SUMAR
+dec cx
+jmp SKIP
+SUMAR: inc cx
+SKIP:pop ax
+IRET
+
+ORG 2000H
+CLI
+MOV AL, 0FCH
+OUT PIC+1, AL ; PIC: registro IMR
+MOV AL, N_CLK 
+OUT PIC+5, AL ; PIC: registro INT1
+MOV AL, N_F10
+OUT PIC+4, AL ; PIC: registro INT0
+MOV AL, 1
+OUT TIMER+1, AL ; TIMER: registro COMP
+MOV AL, 0
+OUT TIMER, AL ; TIMER: registro CONT
+MOV BX, OFFSET DMIN
+MOV AL, OFFSET FIN-OFFSET DMIN
+MOV CX,0
+STI
+LAZO: JMP LAZO
+hlt
+END
+
+
+--------------------------------------------
+EJERCICIO 15
+
+TIMER EQU 10H
+PIC EQU 20H
+EOI EQU 20H
+N_F10 EQU 10
+N_CLK EQU 11
+
+ORG 40
+IP_F10 DW RUT_F10
+org 44
+IP_CLK DW RUT_CLK
+
+org 1000h
+MSJ_TAM db "Cantidad digitos del valor: "
+MSJ_TAM_FIN db ?
+MSJ_VAL db 0ah
+        db "Valor para cuenta regresiva: "
+MSJ_VAL_FIN db ?
+
+org 1500h
+TAM db ?
+    db 0ah
+VAL db ?
+
+ORG 2000H
+CLI
+MOV AL, 7eH
+OUT PIC+1, AL ; PIC: registro IMR
+MOV AL, N_F10
+OUT PIC+4, AL ; PIC: registro INT0
+STI
+CALL LEER_VAL
+inf: jmp inf
+hlt
+
+ORG 3000H
+LEER_VAL:MOV BX, OFFSET MSJ_TAM
+MOV AL, OFFSET MSJ_TAM_FIN -OFFSET MSJ_TAM
+INT 7
+mov bx,offset TAM
+INT 6
+mov al,1
+int 7
+sub TAM,30h
+mov cl,[bx]
+mov bx, offset MSJ_VAL
+mov al, offset MSJ_VAL_FIN - offset MSJ_VAL
+int 7
+mov al,1
+mov ch,cl
+mov bx,offset VAL
+ite1: cmp ch,0
+jz LEER_VAL_FIN
+int 6
+int 7
+inc bx
+dec ch
+jmp ite1
+LEER_VAL_FIN: ret
+
+RUT_F10:MOV AL, EOI
+OUT EOI, AL
+CLI
+MOV AL, 0FDH
+OUT PIC+1, AL ; PIC: registro IMR
+MOV AL, N_CLK 
+OUT PIC+5, AL ; PIC: registro INT1
+MOV AL, 1
+OUT TIMER+1, AL ; TIMER: registro COMP
+MOV AL, 0
+OUT TIMER, AL ; TIMER: registro CONT
+STI
+IRET
+
+RUT_CLK: PUSH AX
+mov ch,0
+mov bx,offset VAL-1
+add bx,cx
+ACT:cmp ch,cl
+jz IMPRIMIR_VAL
+mov dl,[bx]
+dec dl
+mov [bx],dl
+cmp byte ptr [bx],2fh
+jnz IMPRIMIR_VAL
+mov byte ptr [bx],39h
+dec bx
+inc ch
+jmp ACT
+IMPRIMIR_VAL: mov al,cl
+inc al
+mov bx,offset VAL -1
+int 7
+MOV AL, 0
+OUT TIMER, AL
+MOV AL, EOI
+OUT PIC, AL
+POP AX
+iret
+END

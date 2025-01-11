@@ -1,0 +1,539 @@
+EJERCICIO 5
+
+org 1000h
+A db 12
+B db 23
+C db 34
+D db ?
+
+org 2000h
+mov ax, A
+add ax, B
+sub ax, C
+mov D,ax
+hlt
+-----------------------------
+org 1000h
+A db 12
+B db 23
+C db 34
+D db ?
+
+org 3000h
+calculo: mov ax,A
+add ax, B
+sub ax, C
+mov D,ax
+ret
+
+org 2000h
+call calculo
+hlt
+end
+------------------------------
+org 1000h
+A db 12
+B db 23
+C db 34
+D db ?
+
+org 3000h
+calculo: add ax, bx
+sub ax, cx
+mov dx,ax
+ret
+
+org 2000h
+mov ax,A
+mov bx,B
+mov cx,C
+call calculo
+mov D,dx
+hlt
+end
+
+
+-------------------------------
+EJERCICIO 6
+
+org 1000h
+NUM1 dw 10
+NUM2 dw 5
+RES dw ?
+
+org 3000h
+
+org 2000h
+mov ax,NUM1
+mov bx,NUM2
+mov cx,0
+mult: add cx,ax
+dec bx
+cmp bx,0
+jnz mult
+mov RES,cx
+hlt
+end
+--------------------------------
+org 1000h
+NUM1 dw 10
+NUM2 dw 10
+RES dw ?
+
+org 3000h
+mul: mov cx,0
+repetir: add cx,ax
+dec bx
+cmp bx,0
+jnz repetir
+ret
+
+org 2000h
+mov ax,NUM1
+mov bx,NUM2
+call mul
+mov RES,cx
+hlt
+end
+----------------------------------
+org 1000h
+NUM1 dw 10
+NUM2 dw 2
+RES dw ?
+
+org 3000h
+mul: mov cx,0
+ mov dx,[bx]
+ mov bx,ax
+ mov ax,[bx]
+ repetir: add cx,ax
+ dec dx
+ cmp dx,0
+ jnz repetir
+ret
+
+org 2000h
+mov ax,offset NUM1
+mov bx,offset NUM2
+call mul
+mov RES,cx
+hlt
+end
+
+
+-------------------------------------
+EJERCICIO 8
+
+org 1000h
+STRING db "calentita"
+LAST db 00h
+
+org 3000h
+LONGITUD: mov dx,0
+ contar: cmp byte ptr [bx], 0
+ jz FIN
+ inc bx
+ inc dx
+ jmp contar
+FIN: ret
+
+org 2000h
+mov bx, offset STRING
+call LONGITUD
+hlt
+end
+--------------------------------------
+org 1000h
+STRING db "andaACHupARLA"
+LAST db 00h
+
+org 3000h
+CONTAR_MIN: mov dx,0
+ dec bx
+ contar: inc bx
+ cmp byte ptr [bx], 0
+ jz FIN
+ cmp byte ptr [bx], 97
+ js contar
+ cmp byte ptr [bx], 122
+ jns contar
+ inc dx
+ jmp contar
+FIN: ret
+ 
+
+org 2000h
+mov bx, offset STRING
+call CONTAR_MIN
+hlt
+end
+-----------------------------------------
+org 1000h
+STRING db "andaACHupARLA"
+LAST db 00h
+VOCAL db "Y"
+
+org 3000h
+ES_VOCAL: cmp al,65
+ jz sies
+ cmp al,69
+ jz sies
+ cmp al,73
+ jz sies
+ cmp al,79
+ jz sies
+ cmp al,85
+ jz sies
+ cmp al,97
+ jz sies
+ cmp al,101
+ jz sies
+ cmp al,105
+ jz sies
+ cmp al,111
+ jz sies
+ cmp al,117
+ jz sies
+ mov dx,00h
+ jmp FIN_ES_VOCAL
+ sies: mov dx,0ffh
+FIN_ES_VOCAL: ret
+
+org 2000h
+mov al, VOCAL
+call ES_VOCAL
+hlt
+end
+----------------------------------------
+org 1000h
+STRING db "Contas 123 num"
+LAST db 00h
+VOCAL db "Y"
+
+org 3000h
+ES_VOCAL: cmp al,65
+ jz sies
+ cmp al,69
+ jz sies
+ cmp al,73
+ jz sies
+ cmp al,79
+ jz sies
+ cmp al,85
+ jz sies
+ cmp al,97
+ jz sies
+ cmp al,101
+ jz sies
+ cmp al,105
+ jz sies
+ cmp al,111
+ jz sies
+ cmp al,117
+ jz sies
+ mov dx,00h
+ jmp FIN_ES_VOCAL
+ sies: mov dx,0ffh
+FIN_ES_VOCAL: ret
+
+CONTAR_VOC: mov cx,0
+ recorrer: cmp byte ptr [bx],0
+ jz FIN_CONTAR_VOC
+ mov al,[bx]
+ call ES_VOCAL
+ inc bx
+ cmp dx,0
+ jz recorrer
+ inc cx
+ jmp recorrer
+FIN_CONTAR_VOC: ret
+
+org 2000h
+mov bx,offset STRING
+call CONTAR_VOC
+hlt
+end
+--------------------------------------------
+org 1000h
+STRING db "HaY 2Y Ys"
+LAST db 00h
+CAR db "Y"
+
+org 3000h
+CONTAR_CAR: mov cx,0
+ pop dx
+ pop bx
+ pop ax
+ recorrer: cmp byte ptr [bx], 0
+ jz FIN_CONTAR_CAR
+ cmp byte ptr [bx],al
+ jnz pasar
+ inc cx
+ pasar: inc bx
+ jmp recorrer
+FIN_CONTAR_CAR: push dx
+ret
+
+org 2000h
+mov ax, CAR
+push ax
+mov ax, offset STRING
+push ax
+call CONTAR_CAR
+pop ax
+pop ax
+hlt
+end
+--------------------------------------------
+org 1000h
+STRING db "andante"
+LAST db 00h
+ORIGINAL db "a"
+REEMPLAZO db "A"
+
+org 3000h
+REEMPLAZAR_CAR: mov cx,0
+ pop dx
+ pop bx
+ pop ax
+ recorrer: cmp byte ptr [bx], 0
+ jz FIN_REEMPLAZAR_CAR
+ cmp byte ptr [bx],al
+ jnz pasar
+ mov [bx],ah
+ pasar: inc bx
+ jmp recorrer
+FIN_REEMPLAZAR_CAR: push dx
+ret
+
+org 2000h
+mov al, ORIGINAL
+mov ah, REEMPLAZO
+push ax
+mov ax, offset STRING
+push ax
+call REEMPLAZAR_CAR
+pop ax
+pop ax
+hlt
+end
+
+
+----------------------------------------
+EJERCICIO 9
+
+org 1000h
+CHIQUI db 10001100b
+
+org 3000h
+ROTARIZQ: mov al,[bx]
+ add al,al
+ jnc FIN_ROTARIZQ
+ inc al
+FIN_ROTARIZQ: mov [bx],al
+ret
+
+org 2000h
+mov bx,offset CHIQUI
+call ROTARIZQ
+hlt
+end
+------------------------------------------
+org 1000h
+CHIQUI db 10001100b
+VECES dw 3
+
+org 3000h
+ROTARIZQ_N: mov al,[bx]
+ iterar: cmp cx,0
+ jz FIN_ROTARIZQ_N
+ dec cx
+ add al,al
+ jnc iterar
+ inc al
+ jmp iterar
+FIN_ROTARIZQ_N: mov [bx],al
+ret
+
+org 2000h
+mov cx,VECES
+mov bx,offset CHIQUI
+call ROTARIZQ_N
+hlt
+end
+------------------------------------------
+org 1000h
+CHIQUI db 10001100b
+VECES dw 3
+
+org 3000h
+ROTARIZQ_N: mov al,[bx]
+ iterar: cmp cx,0
+ jz FIN_ROTARIZQ_N
+ dec cx
+ add al,al
+ jnc iterar
+ inc al
+ jmp iterar
+FIN_ROTARIZQ_N: mov [bx],al
+ret
+
+ROTARDER_N: mov dx,cx
+mov cx,8
+sub cx,dx
+call ROTARIZQ_N
+ret
+
+org 2000h
+mov cx,VECES
+mov bx,offset CHIQUI
+call ROTARDER_N
+hlt
+end
+-------------------------------------------
+org 1000h
+CHIQUI db 10001100b
+VECES dw 2
+
+org 3000h
+ROTARDER_N: mov dx,0008h
+ sub dx,cx
+ mov al,[bx]
+ iterar: cmp dx,0
+ jz FIN_ROTARDER_N
+ dec dx
+ add al,al
+ jnc iterar
+ inc al
+ jmp iterar
+FIN_ROTARDER_N: mov [bx],al
+ret
+
+org 2000h
+mov cx,VECES
+mov bx,offset CHIQUI
+call ROTARDER_N
+hlt
+end
+------------------------------------------
+org 1000h
+NUM1 dw 45
+NUM2 dw 11
+
+org 3000h
+SWAP: mov bx,sp
+add bx,2
+mov bx,[bx]
+mov dx,bx
+mov ax,[bx]
+mov bx,sp
+add bx,4
+mov bx,[bx]
+mov cx,[bx]
+mov [bx],ax
+mov bx,dx
+mov [bx],cx
+ret
+
+org 2000h
+mov ax,offset NUM1
+push ax
+mov ax,offset NUM2
+push ax
+call SWAP
+hlt
+end
+----------------------------------------
+org 1000h
+NUM1 dw 45
+NUM2 dw 11
+
+RESTO: cmp ax,bx
+ js FIN_RESTO
+ sub ax,bx
+ jmp RESTO
+FIN_RESTO: mov dx,ax
+ret
+  
+org 2000h
+mov ax,NUM1
+mov bx,NUM2
+call RESTO
+hlt
+end
+---------------------------------------
+org 1000h
+N1 dw 01
+   dw 10
+N2 dw 15
+   dw 2
+ 
+org 2000h
+mov bx,offset N2+4
+mov ax,N1
+mov cx,N2
+add ax,cx
+mov [bx],ax
+mov bx,offset N1 +2
+mov ax,[bx]
+mov bx,offset N2 +2
+mov cx,[bx]
+jnc high
+inc ax
+jnc high
+inc cx
+high: add bx,4
+add ax,cx
+mov [bx],ax
+hlt
+end
+---------------------------------------
+org 1000h
+N1 dw 03h,07h
+N2 dw 03h,03h
+RES dw ?,?
+
+org 3000h
+SUM32: mov dx,0000h
+mov bx,sp
+add bx,8
+mov cx,[bx]
+add bx,4
+mov ax,[bx]
+add ax,cx
+jnc high
+mov dx,0001h
+high:sub bx,8
+mov bx,[bx]
+mov [bx],ax
+mov bx,sp
+add bx,6
+mov cx,[bx]
+add bx,4
+mov ax,[bx]
+add ax,cx
+add ax,dx
+mov bx,sp
+add bx,2
+mov bx,[bx]
+mov [bx],ax
+ret
+
+org 2000h
+mov ax,N1
+push ax
+mov bx,offset N1+2
+mov bx,[bx]
+push bx
+mov ax,N2
+push ax
+mov bx,offset N2+2
+mov bx,[bx]
+push bx
+mov ax,offset RES
+push ax
+mov bx,offset RES+2
+push bx
+call SUM32
+hlt
+end

@@ -1,0 +1,75 @@
+programa P1_5
+procesos
+  proceso juntarPapeles(ES papeles: numero)
+  comenzar
+    mientras HayPapelEnLaEsquina
+      tomarPapel
+      papeles:= papeles +1
+  fin
+  proceso juntarFlores(ES flores: numero)
+  comenzar
+    mientras HayFlorEnLaEsquina
+      tomarFlor
+      flores:= flores +1
+  fin
+
+areas
+  areaFull : AreaP(1,1,100,100)
+
+robots 
+  robot horizontal
+  variables
+    flores: numero
+    ca: numero
+  comenzar
+    ca:= PosCa
+    derecha
+    repetir 2
+      flores:= 0
+      juntarFlores(flores)
+      repetir 19
+        mover
+        juntarFlores(flores)
+      repetir flores
+        depositarFlor
+      si (PosCa<>(ca + 5))
+        Pos((PosAv - 19),(PosCa + 5))
+  fin
+  robot vertical
+  variables
+    papeles: numero
+    av: numero
+  comenzar
+    av:= PosAv
+    repetir 2
+      papeles:= 0
+      juntarPapeles(papeles)
+      repetir 19
+        mover
+        juntarPapeles(papeles)
+      Pos(PosAv,(PosCa - 19))
+      repetir papeles
+        depositarPapel
+      si (PosAv<>(av + 5))
+        Pos((PosAv + 5),PosCa)
+  fin
+
+ 
+variables 
+  robot1: horizontal
+  robot2: vertical
+  robot3: horizontal
+  robot4: vertical
+
+comenzar 
+  AsignarArea(robot1,areaFull)
+  AsignarArea(robot2,areaFull)
+  AsignarArea(robot3,areaFull)
+  AsignarArea(robot4,areaFull)
+  Iniciar(robot1, 1, 75)
+  Iniciar(robot2, 75, 81)
+  Iniciar(robot3, 81, 10)
+  Iniciar(robot4, 10, 1)
+fin
+
+

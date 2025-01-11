@@ -1,0 +1,107 @@
+programa p3_e1
+procesos
+  proceso juntarFlores(ES flo: numero)
+  comenzar
+    mientras HayFlorEnLaEsquina
+      tomarFlor
+      flo:= flo +1
+  fin
+  proceso juntarPapeles(ES pa: numero)
+  comenzar
+    mientras HayPapelEnLaEsquina
+      tomarPapel
+      pa:= pa +1
+  fin
+  proceso dejarFlor(ES flo: numero; E iniAv: numero; E iniCa: numero)
+  comenzar
+    BloquearEsquina(10, 10)
+    Pos(10, 10)
+    depositarFlor
+    flo:= flo -1
+    Pos(iniAv, iniCa)
+    LiberarEsquina(10, 10)
+  fin
+  proceso dejarPapel(ES pa: numero; E iniAv: numero; E iniCa: numero)
+  comenzar
+    BloquearEsquina(10, 10)
+    Pos(10, 10)
+    depositarPapel
+    pa:= pa -1
+    Pos(iniAv, iniCa)
+    LiberarEsquina(10, 10)
+  fin
+
+areas
+  aFloreros: AreaPC(1, 1, 5, 10)
+  aPapeleros: AreaPC(6, 1, 10, 9)
+  aInicioFlo: AreaPC(6, 10, 7, 10)
+  aInicioPa: AreaPC(8, 10, 9, 10)
+  aCentral: AreaC(10, 10, 10, 10)
+
+robots
+  robot florero
+  variables
+    iniAv, iniCa, ranAv, ranCa: numero
+    flo: numero
+  comenzar
+    flo:= 0
+    iniAv:= PosAv
+    iniCa:= PosCa
+    repetir 5
+      Random(ranAv, 1, 5)
+      Random(ranCa, 1, 10)
+      BloquearEsquina(ranAv, ranCa)
+      Pos(ranAv, ranCa)
+      juntarFlores(flo)
+      Pos(iniAv, iniCa)
+      LiberarEsquina(ranAv, ranCa)
+    mientras (flo > 0)
+      dejarFlor(flo, iniAv, iniCa)
+  fin
+
+  robot papelero
+  variables
+    iniAv, iniCa, ranAv, ranCa: numero
+    pa: numero
+  comenzar
+    pa:= 0
+    iniAv:= PosAv
+    iniCa:= PosCa
+    repetir 5
+      Random(ranAv, 6, 10)
+      Random(ranCa, 1, 9)
+      BloquearEsquina(ranAv, ranCa)
+      Pos(ranAv, ranCa)
+      juntarPapeles(pa)
+      Pos(iniAv, iniCa)
+      LiberarEsquina(ranAv, ranCa)
+    mientras (pa > 0)
+      dejarPapel(pa, iniAv, iniCa)
+  fin
+
+variables
+  rFlo1: florero
+  rFlo2: florero
+  rPa1: papelero
+  rPa2: papelero
+
+comenzar
+  AsignarArea(rFlo1, aInicioFlo)
+  AsignarArea(rFlo1, aFloreros)
+  AsignarArea(rFlo1, aCentral)
+  AsignarArea(rFlo2, aInicioFlo)
+  AsignarArea(rFlo2, aFloreros)
+  AsignarArea(rFlo2, aCentral)
+  
+  AsignarArea(rPa1, aInicioPa)
+  AsignarArea(rPa1, aPapeleros)
+  AsignarArea(rPa1, aCentral)
+  AsignarArea(rPa2, aInicioPa)
+  AsignarArea(rPa2, aPapeleros)
+  AsignarArea(rPa2, aCentral)
+  
+  Iniciar(rFlo1, 6, 10)
+  Iniciar(rFlo2, 7, 10)
+  Iniciar(rPa1, 8, 10)
+  Iniciar(rPa2, 9, 10)
+fin

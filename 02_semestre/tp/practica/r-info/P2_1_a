@@ -1,0 +1,39 @@
+programa ejer1a
+procesos
+  proceso juntarFlores(ES flores: numero)
+  comenzar
+    mientras HayFlorEnLaEsquina
+      tomarFlor
+      flores:= flores +1
+  fin
+areas
+  competencia: AreaC(1,1,2,20)
+robots
+  robot juntador
+  variables
+    flores,aux: numero
+  comenzar
+    flores:= 0
+    repetir 9
+      juntarFlores(flores)
+      mover
+    juntarFlores(flores)
+    si (PosAv = 1)
+      EnviarMensaje(flores,rJuntador2)
+      RecibirMensaje(aux,rJuntador2)
+    sino
+      RecibirMensaje(aux,rJuntador1)
+      EnviarMensaje(flores,rJuntador1)
+    si (flores>aux)
+      flores:= flores - aux
+      Informar(flores)
+  fin
+variables
+  rJuntador1: juntador
+  rJuntador2: juntador
+comenzar
+  AsignarArea(rJuntador1,competencia)
+  AsignarArea(rJuntador2,competencia)
+  Iniciar(rJuntador1, 1,1)
+  Iniciar(rJuntador2, 2,11)
+fin

@@ -1,0 +1,101 @@
+programa p3_e3
+procesos
+  proceso enviarIdYEsq(E esqAv: numero; E esqCa: numero)
+  comenzar
+    EnviarMensaje(1, r1)
+    EnviarMensaje(esqAv, r1)
+    EnviarMensaje(esqCa, r1)
+    EnviarMensaje(2, r2)
+    EnviarMensaje(esqAv, r2)
+    EnviarMensaje(esqCa, r2)
+    EnviarMensaje(3, r3)
+    EnviarMensaje(esqAv, r3)
+    EnviarMensaje(esqCa, r3)
+    EnviarMensaje(4, r4)
+    EnviarMensaje(esqAv, r4)
+    EnviarMensaje(esqCa, r4)
+  fin
+
+areas
+  aJefe: AreaP(1, 1, 1, 1)
+  aInicio: AreaPC(2, 1, 5, 1)
+  aTrabajo: AreaPC(2, 2, 10, 10)
+
+robots
+  robot florero
+  variables
+    iniAv, iniCa, esqAv, esqCa: numero
+    id: numero
+    flo: numero
+    seguir: boolean
+  comenzar
+    flo:= 0
+    iniAv:= PosAv
+    iniCa:= PosCa
+    seguir:= V
+    RecibirMensaje(id, rJefe)
+    RecibirMensaje(esqAv, rJefe)
+    RecibirMensaje(esqCa, rJefe)
+    mientras (seguir)
+      BloquearEsquina(esqAv, esqCa)
+      Pos(esqAv, esqCa)
+      si HayFlorEnLaEsquina
+        tomarFlor
+      seguir:= HayFlorEnLaEsquina
+      Pos(iniAv, iniCa)
+      LiberarEsquina(esqAv, esqCa)
+    EnviarMensaje(id, rJefe)
+    EnviarMensaje(flo, rJefe)
+  fin
+  
+  robot arbitro
+  variables
+    ranAv, ranCa: numero
+    id, idMax, cant, cantMax: numero
+  comenzar
+    cantMax:= -1
+    Random(ranAv, 2, 10)
+    Random(ranCa, 2, 10)
+    enviarIdYEsq(ranAv, ranCa)
+    repetir 4
+      RecibirMensaje(id, *)
+      si (id = 1)
+        RecibirMensaje(cant, r1)
+      sino
+        si (id = 2)
+          RecibirMensaje(cant, r2)
+        sino
+          si (id = 3)
+            RecibirMensaje(cant, r3)
+          sino
+            RecibirMensaje(cant, r4)
+      si (cant > cantMax)
+        cantMax:= cant
+        idMax:= id
+    Informar('Gano', idMax)
+  fin
+
+variables
+  r1: florero
+  r2: florero
+  r3: florero
+  r4: florero
+  rJefe: arbitro
+
+comenzar
+  AsignarArea(rJefe, aJefe)
+  AsignarArea(r1, aInicio)
+  AsignarArea(r1, aTrabajo)
+  AsignarArea(r2, aInicio)
+  AsignarArea(r2, aTrabajo)
+  AsignarArea(r3, aInicio)
+  AsignarArea(r3, aTrabajo)
+  AsignarArea(r4, aInicio)
+  AsignarArea(r4, aTrabajo)
+  
+  Iniciar(rJefe, 1, 1)
+  Iniciar(r1, 2, 1)
+  Iniciar(r2, 3, 1)
+  Iniciar(r3, 4, 1)
+  Iniciar(r4, 5, 1)
+fin

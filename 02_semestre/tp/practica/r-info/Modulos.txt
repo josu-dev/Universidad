@@ -1,0 +1,10 @@
+  proceso mod(E a: numero; E b: numero; ES res: numero)
+  comenzar
+    si (a > b)
+      res:= a - ( (a / b) * b )
+    sino
+      si (a < b)
+        res:= a
+      sino
+        res:= 0
+  fin

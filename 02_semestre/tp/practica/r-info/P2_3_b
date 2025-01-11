@@ -1,0 +1,101 @@
+programa ejer3
+procesos
+  proceso juntarPapeles(ES papeles:numero)
+  comenzar
+    mientras HayPapelEnLaEsquina
+      tomarPapel
+      papeles:= papeles +1
+  fin
+  proceso recorrerPapeles(ES papeles: numero)
+  comenzar
+    repetir 9
+      juntarPapeles(papeles)
+      mover
+    juntarPapeles(papeles)
+  fin
+
+  proceso juntarFlores(ES flores: numero)
+  comenzar
+    mientras HayFlorEnLaEsquina
+      tomarFlor
+      flores:= flores +1
+  fin
+  proceso recorrerFlores(ES flores: numero)
+  comenzar
+    repetir 9
+      juntarFlores(flores)
+      mover
+    juntarFlores(flores)
+  fin
+
+areas
+  rutaA: AreaPC(1,1,40,1)
+  rutaB: AreaPC(1,5,40,5)
+
+robots
+  robot equipoA
+  variables
+    papeles: numero
+  comenzar
+    derecha
+    si (PosAv = 1)
+      papeles:= 0
+    sino
+      RecibirMensaje(papeles, *)
+    recorrerPapeles(papeles)
+    si (PosAv=10)
+      EnviarMensaje(papeles, A2)
+      RecibirMensaje(papeles, A2)
+    sino
+      EnviarMensaje(papeles, A1)
+      RecibirMensaje(papeles, A1)
+    Pos(PosAv+11,PosCa)
+    recorrerPapeles(papeles)
+    si (PosAv=30)
+      EnviarMensaje(papeles, A2)
+    sino
+      Informar(papeles)
+  fin
+
+  robot equipoB
+  variables
+    flores: numero
+  comenzar
+    derecha
+    si (PosAv = 1)
+      flores:= 0
+    sino
+      RecibirMensaje(flores, *)
+    recorrerFlores(flores)
+    si (PosAv=10)
+      EnviarMensaje(flores, B2)
+      RecibirMensaje(flores, B2)
+    sino
+      EnviarMensaje(flores, B1)
+      RecibirMensaje(flores, B1)
+    Pos(PosAv+11,PosCa)
+    recorrerFlores(flores)
+    si (PosAv=30)
+      EnviarMensaje(flores, B2)
+    sino
+      Informar(flores)
+  fin
+
+
+
+variables
+  A1: equipoA
+  A2: equipoA
+  B1: equipoB
+  B2: equipoB
+
+comenzar
+  AsignarArea(A1, rutaA)
+  AsignarArea(A2, rutaA)
+  AsignarArea(B1, rutaB)
+  AsignarArea(B2, rutaB)
+  Iniciar(A1, 1, 1)
+  Iniciar(A2, 11, 1)
+  Iniciar(B1, 1, 5)
+  Iniciar(B2, 11, 5)
+fin

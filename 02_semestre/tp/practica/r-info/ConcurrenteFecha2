@@ -1,0 +1,123 @@
+programa ConcurrenteFecha2
+procesos
+  proceso izquierda
+  comenzar
+    repetir 3
+      derecha
+  fin 
+  
+  proceso juntarFlores(ES f: numero)
+  comenzar
+    mientras HayFlorEnLaEsquina
+      tomarFlor
+      f:= f + 1
+  fin
+  proceso recorrer(E n: numero; ES f: numero)
+  comenzar
+    repetir n
+      juntarFlores (f)
+      mover
+    juntarFlores (f)
+  fin
+  proceso juntarSeguro(ES f: numero)
+  comenzar
+    BloquearEsquina (PosAv + 1, PosCa)
+    mover
+    juntarFlores (f)
+    mover
+    LiberarEsquina (PosAv - 1, PosCa)
+  fin
+
+areas
+  aJefe: AreaP (1,1,1,1)
+  aCor1: AreaPC (55,1,65,24)
+  aCor2: AreaPC (55,26,65,59)
+  aConflicto: AreaPC (55,25,65,25)
+  aLim1: AreaP (1,25,54,25)
+  aLim2: AreaP (66,25,100,25)
+
+robots
+  robot corredor
+  variables
+    id, nEsq, pasos:numero
+  comenzar
+    nEsq:= 0
+    RecibirMensaje (id, rJefe)
+    
+    mientras (PosCa < 50)
+      Random (pasos,5,10)
+      repetir pasos
+        si (HayPapelEnLaEsquina & ~HayFlorEnLaEsquina)
+          nEsq:= nEsq + 1
+        si (PosCa = 24)
+          BloquearEsquina (PosAv, 25)
+        sino
+          si (PosCa = 25)
+            LiberarEsquina (PosAv, 25)
+        mover
+    si ((PosCa = 50) & HayPapelEnLaEsquina & ~HayFlorEnLaEsquina)
+      nEsq:= nEsq + 1
+    
+    EnviarMensaje (id, rJefe)
+    EnviarMensaje (nEsq, rJefe)
+  fin
+  
+  robot jefe
+  variables
+    id,nEsq, aux: numero 
+  comenzar
+    EnviarMensaje (1, rCor1)
+    EnviarMensaje (2, rCor2)
+    
+    RecibirMensaje (id, *)
+    si (id = 1)
+      RecibirMensaje (nEsq, rCor1)
+    sino
+      RecibirMensaje (nEsq, rCor2)
+    
+    RecibirMensaje (id, *)
+    RecibirMensaje (aux, *)
+    
+    Informar ('Termino_ultimo', id)
+    Informar ('El_primero_conto', nEsq)
+  fin 
+  
+  robot limpiador 
+  variables
+    f: numero 
+  comenzar
+    izquierda
+    f:= 0
+    recorrer (34, f)
+    
+    juntarSeguro (f)
+    recorrer (8, f)
+    
+    juntarSeguro(f)
+    recorrer (53, f)
+  fin
+  
+variables
+  rCor1,rCor2: corredor
+  rLim: limpiador
+  rJefe: jefe
+comenzar
+  AsignarArea (rCor1, aCor1)
+  AsignarArea (rCor1, aConflicto)
+  AsignarArea (rCor1, aCor2)
+  
+  AsignarArea (rCor2, aCor1)
+  AsignarArea (rCor2, aConflicto)
+  AsignarArea (rCor2, aCor2)
+  
+  AsignarArea (rLim, aLim1)
+  AsignarArea (rLim, aConflicto)
+  AsignarArea (rLim, aLim2)
+  
+  AsignarArea (rJefe, aJefe)
+  
+  Iniciar (rCor1,55,1)
+  Iniciar (rCor2,65,1)
+  Iniciar (rLim,100,25)
+  Iniciar (rJefe,1,1)
+fin

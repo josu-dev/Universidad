@@ -1,0 +1,71 @@
+programa P1_3
+procesos
+  proceso contarPapeles (ES papel: numero)
+  variables
+    aux: numero
+  comenzar
+    aux:= 0
+    mientras HayPapelEnLaEsquina
+      tomarPapel
+      aux:= aux + 1
+    repetir aux
+      depositarPapel
+    papel:= papel + aux
+  fin
+  proceso contarFlores (ES flor: numero)
+  variables
+    aux: numero
+  comenzar
+    aux:= 0
+    mientras HayFlorEnLaEsquina
+      tomarFlor
+      aux:= aux + 1
+    repetir aux
+      depositarFlor
+    flor:= flor + aux
+  fin
+
+  
+areas
+  ciudad : AreaC(12,6,32,24)
+
+robots 
+  robot tipo1
+  variables
+    lado: numero
+    superaEn1: numero
+    flores: numero
+    papeles: numero
+  comenzar
+    lado:= 1
+    superaEn1:= 0
+    repetir 4
+      flores:= 0
+      papeles:= 0
+      contarPapeles(papeles)
+      contarFlores(flores)
+      repetir 2
+        repetir lado
+          mover
+          contarPapeles(papeles)
+          contarFlores(flores)
+        derecha
+      repetir 2
+        derecha
+      si (papeles= (flores +1))
+        superaEn1:= superaEn1 +1
+      lado:= lado +1
+    Informar(superaEn1)
+  fin
+variables 
+  robot1: tipo1
+  robot2: tipo1
+  robot3: tipo1
+comenzar 
+  AsignarArea(robot1,ciudad)
+  AsignarArea(robot2,ciudad)
+  AsignarArea(robot3,ciudad)
+  Iniciar(robot1, 12, 14)
+  Iniciar(robot2, 17, 10)
+  Iniciar(robot3, 22, 6)
+fin

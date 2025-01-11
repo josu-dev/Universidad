@@ -1,0 +1,12 @@
+{
+    "git.ignoreLimitWarning": true,
+    "files.associations": {
+        "*.css": "css",
+        "etimer.h": "c",
+        "button-hal.h": "c",
+        "leds.h": "c"
+    },
+    "[cpp]" : {
+        "editor.tabSize": 2
+    }
+}

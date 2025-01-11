@@ -1,0 +1,3 @@
+.local
+secrets*.h
+!secrets.example.h

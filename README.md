@@ -35,11 +35,17 @@ Este repositorio contiene resoluciones, trabajos y programas realizados durante 
   - [OO 2 (Orientación a Objetos 2)](./05_semestre/oo_2)
 
 - Sexto semestre
-  - [CyC (Computabilidad y Complejidad)](./06_semestre/cyc)
+  - CyC (Computabilidad y Complejidad)
   - [PC (Programación Concurrente)](./06_semestre/pc)
   - [PS (Proyecto de Software)](./06_semestre/ps)
   - [RyC (Redes y Comunicaciones)](./06_semestre/ryc)
   - [TTPS (Taller de Tecnologías de Producción de Software)](./06_semestre/ttps)
+
+- Septimo semestre
+  - [IOT (Optativa 1 LI - Internet de las Cosas)](./07_semestre/iot)
+  - SO (Sistemas Operativos)
+  - [SP (Sistemas Paralelos)](./07_semestre/sp)
+  - TCVP (Teoría de la Computación y Verificación de Programas)
 
 ## Licencia
 
